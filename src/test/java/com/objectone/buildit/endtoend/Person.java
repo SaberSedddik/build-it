@@ -6,6 +6,7 @@ package com.objectone.buildit.endtoend;
 public class Person {
     private String name;
     private String lastName;
+    private int sin;
 
     public String getName() {
         return name;
@@ -23,6 +24,14 @@ public class Person {
         this.lastName = lastName;
     }
 
+    public int getSin() {
+        return sin;
+    }
+
+    public void setSin(int sin) {
+        this.sin = sin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,6 +39,7 @@ public class Person {
 
         Person person = (Person) o;
 
+        if (sin != person.sin) return false;
         if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
         if (name != null ? !name.equals(person.name) : person.name != null) return false;
 
@@ -40,6 +50,7 @@ public class Person {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + sin;
         return result;
     }
 }

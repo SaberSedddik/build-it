@@ -1,12 +1,13 @@
 package com.objectone.buildit;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by saberseddik on 15-01-25.
  */
-public class ObjectBuilder<T> {
+public class ObjectBuilder<T> implements Cloneable {
 
     private Map<String, Object> fieldsValues;
     private Class<T> clazz;
@@ -28,16 +29,39 @@ public class ObjectBuilder<T> {
     }
 
     public T build() {
-        T builtObject = null;
-        try {
-            builtObject = clazz.newInstance();
-
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        T builtObject = newInstance();
+        for (String field : fieldsValues.keySet()) {
+            populateField(field, builtObject);
         }
-
         return builtObject;
+    }
+
+    private void populateField(String field, T destination) {
+        Field fieldObject = null;
+        try {
+            fieldObject = clazz.getDeclaredField(field);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        setField(fieldObject, destination, fieldsValues.get(field));
+    }
+
+    private void setField(Field field, T destination, Object value) {
+        field.setAccessible(true);
+        try {
+            field.set(destination, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private T newInstance() {
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

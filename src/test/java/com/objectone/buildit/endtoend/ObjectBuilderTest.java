@@ -1,6 +1,5 @@
 package com.objectone.buildit.endtoend;
 
-import com.objectone.buildit.ObjectBuilder;
 import org.junit.Test;
 
 import static com.objectone.buildit.BuildIt.a;
@@ -17,8 +16,9 @@ public class ObjectBuilderTest {
         Person expected = new Person();
         expected.setName("saber");
         expected.setLastName("seddik");
+        expected.setSin(12345);
 
-        Person result= a(Person.class).having("name","saber").having("lastName","seddik").build();
+        Person result= a(Person.class).having("name","saber").having("lastName","seddik").having("sin",12345).build();
 
         assertThat(result, equalTo(expected));
     }
